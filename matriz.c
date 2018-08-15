@@ -16,27 +16,27 @@ void vetlibera (double* v)
 void printvec(double *vec,int n)
 {
 	int i;
-	for(i=0;i<5;i++)
+	for(i=0;i<n;i++)
 	{
 		printf("v[%d] = %f\n", i,vec[i]);
 	}
 }
 
-void printmat(int n, int m, double **mat)
+void printmat(int m, int n, double **mat)
 {
 	int i,j;
-	for(i=0;i<5;i++)
+	for(i=0;i<m;i++)
 	{
-		for(j=0;j<5;j++)
+		for(j=0;j<n;j++)
 		{
 			printf("mat[%d][%d] = %f\t",i,j,mat[i][j]);
-			if(j==4)
+			if(j==n-1)
 			{
 				printf("\n");
 			}
 		}
 	}
-	
+
 }
 
 double escalar (int n, double* v, double* w)
@@ -55,12 +55,12 @@ double norma2 (int n, double* v)
 {
 	int i;
 	double sum = 0;
-	
+
 	for(i=0;i<n;i++)
 	{
 		sum += v[i]*v[i];
 	}
-	
+
 	return sqrt(sum);
 }
 
@@ -85,44 +85,49 @@ void matlibera (int m, double** A)
 void transposta (int m, int n, double** A, double** T)
 {
 	int i,j;
-	for(i=0;i<m;i++)
+	for(i=0;i<n;i++)
 	{
-		for(j=0;j<n;j++)
+		for(j=0;j<m;j++)
 			T[i][j] = A[j][i];
-	}	
+	}
 }
 
 int main()
 {
-	int i,j,count;
-	double *v = vetcria(5);
-	double *w = vetcria(5);
-	double **m = matcria(5,5);
-	double **trans = matcria(5,5);
-	
-	for(i=0;i<5;i++)
+
+	int i,j,count,n,m;
+	double *v = vetcria(n);
+	double *w = vetcria(n);
+	n = 3;
+	m = 2;
+	double **mat = matcria(m,n);
+	double **trans = matcria(n,m);
+
+	//populando o vetor
+	for(i=0;i<n;i++)
 	{
 		v[i] = i+1;
 		w[i] = v[i];
 	}
-	
+
+	//populando a matriz
 	count = 1;
-	for(i=0;i<5;i++)
+	for(i=0;i<m;i++)
 	{
-		for(j=0;j<5;j++)
-			m[i][j] = count++;
+		for(j=0;j<n;j++)
+			mat[i][j] = count++;
 	}
-		
-	printvec(v,5);
+
+	printvec(v,n);
 	printf("produto escalar de v e w:\n");
-	printf("%f\n",escalar(5,v,w));
-	printf("norma2 de v:\n%f\n",norma2(5,v));
+	printf("%f\n",escalar(n,v,w));
+	printf("norma2 de v:\n%f\n",norma2(n,v));
 	vetlibera(v);
-	printmat(5,5,m);
-	transposta(5,5,m,trans);
+	printmat(m,n,mat);
+	transposta(m,n,mat,trans);
 	printf("transposta: \n");
-	printmat(5,5,trans);
-	matlibera(5,m);
-	
+	printmat(n,m,trans);
+	// matlibera(n,mat);
+
 	return 0;
 }

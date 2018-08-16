@@ -118,14 +118,16 @@ int main()
 			mat[i][j] = count++;
 	}
 
+	printf("imprimindo vetor vet:\n");
 	printvec(v,n);
-	printf("produto escalar de v e w:\n");
+	printf("\nproduto escalar de v e w:\n");
 	printf("%f\n",escalar(n,v,w));
-	printf("norma2 de v:\n%f\n",norma2(n,v));
+	printf("\nnorma2 de v:\n%f\n",norma2(n,v));
 	vetlibera(v);
+	printf("\nimprimindo matriz mat:\n");
 	printmat(m,n,mat);
 	transposta(m,n,mat,trans);
-	printf("transposta: \n");
+	printf("\ntransposta: \n");
 	printmat(n,m,trans);
 	// matlibera(n,mat);
 

@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "matriz.h"
+
 
 double* vetcria (int n)
 {
@@ -92,44 +91,28 @@ void transposta (int m, int n, double** A, double** T)
 	}
 }
 
-int main()
+void multmv (int m, int n, double** A, double* v, double* w)
 {
+	return;
+}
 
-	int i,j,count,n,m;
-	double *v = vetcria(n);
-	double *w = vetcria(n);
-	n = 3;
-	m = 2;
-	double **mat = matcria(m,n);
-	double **trans = matcria(n,m);
+void multmm (int m, int n, int q, double** A, double** B, double** C)
+{
+	int i,j,k;
+	double sum = 0;
 
-	//populando o vetor
-	for(i=0;i<n;i++)
+	for(i=0;i<m;i++) // no meu caso m = n ou seja m = 3 linhas!
 	{
-		v[i] = i+1;
-		w[i] = v[i];
+		sum = 0;
+		for(j=0;j<q;j++)
+		{
+			for(k=0;k<n;k++) // k < ncolunas
+			{
+				sum += A[i][k] * B[k][j];
+			}
+			C[i][j] = sum;
+			sum = 0;
+		}
 	}
 
-	//populando a matriz
-	count = 1;
-	for(i=0;i<m;i++)
-	{
-		for(j=0;j<n;j++)
-			mat[i][j] = count++;
-	}
-
-	printf("imprimindo vetor vet:\n");
-	printvec(v,n);
-	printf("\nproduto escalar de v e w:\n");
-	printf("%f\n",escalar(n,v,w));
-	printf("\nnorma2 de v:\n%f\n",norma2(n,v));
-	vetlibera(v);
-	printf("\nimprimindo matriz mat:\n");
-	printmat(m,n,mat);
-	transposta(m,n,mat,trans);
-	printf("\ntransposta: \n");
-	printmat(n,m,trans);
-	// matlibera(n,mat);
-
-	return 0;
 }

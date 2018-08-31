@@ -5,6 +5,7 @@ int bissecao (double a, double b, int p, double (*f) (double x), double* r)
 {
   int i,n;
   double fa,fc,c;
+  double error = 0.5*pow(10,-p);
 
   n = ceil( log( (b-a)/(0.5 * pow(10, -p)) ) / log(2) ) - 1;
 
@@ -15,7 +16,7 @@ int bissecao (double a, double b, int p, double (*f) (double x), double* r)
     c = (a+b)/2;
     fc = f(c);
 
-    if(fc == 0)
+    if (fc == 0)
       return c;
 
     else if(fa*fc > 0)
@@ -39,7 +40,7 @@ double (*f) (double x), double* r)
 {
   int i,n;
   double y0,y1,y2,x3,y3;
-
+  double error = 0.5 * pow(10,-p);
 
   n=100;
 
@@ -51,9 +52,8 @@ double (*f) (double x), double* r)
     x3 = ((y1*y2/((y0-y1)*(y0-y2)))*x0) + ((y0*y2/((y1-y0)*(y1-y2)))*x1) + ((y0*y1/((y2-y0)*(y2-y1)))*x2);
     x0=x3;
     y3 = f(x3);
-    if (y3 < 0)
-      y3 *= -1;
-    if(y3 < 0.5 * pow(10,-p))
+
+    if(fabs(y3) < error)
     {
       *r = x0;
       return i+1;

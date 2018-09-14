@@ -41,3 +41,19 @@ void NewtonCoef (int n, double* xi, double (*f) (double), double* bi)
 }
 
 
+double NewtonAval (int n, double* xi, double* bi, double x)
+{
+	int i;
+	double res = bi[0];
+	double cache = 1;
+
+	for(i = 1; i < n; i++) 
+	{
+		cache *= (x - xi[i - 1]);
+		res += bi[i] * cache;
+	}
+
+	return res;
+}
+
+

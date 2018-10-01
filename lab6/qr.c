@@ -99,3 +99,25 @@ void QR (int m, int n, double** A, double** Q, double** R)
     transposta(n,m,Qt,Q);
     multmm(n,m,n,Qt,A,R);
 }
+
+
+/* void qr(int m, int n, double** A, double** Q, double** R)
+{
+    int j;
+    int i;
+    double **v = matcria(n,m);
+    double *w = vetcria(m);
+    double **Qt = matcria(n,m);
+    double **r = matcria(m,n);
+    transposta(m,n,A,v);
+
+    for(j=0;j<=n-1;j++)
+    {
+        w = v[j];
+        for (i=0;i<=j-1;i++)
+        {
+            scalar_vect(sum_sqrt(w,m),w,Qt[i],m);
+            r[i][j] = multmv(n,m)
+        }
+    }
+} */

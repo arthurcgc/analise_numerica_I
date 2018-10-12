@@ -36,3 +36,47 @@ double h_otimo (double (*f) (double x), double (*fl) (double x), double x)
     }
     return h_otimo;
 }
+
+
+double simpson (double (*f) (double), double a, double b, int n) 
+{
+	
+	double h = (b - a) / n;
+	double f_xi_half = 0.0, delimiterSum = 0.0;
+	double fa = f(a);
+	double fb = f(b);
+
+	double i;
+	
+	double half = h / 2;
+
+	for(i = a; i <= b - h; i += h) 
+    {
+		f_xi_half += f(i + half);
+	}
+
+	for(i = a + h; i <= b - h; i += h) 
+    {
+		delimiterSum += f(i);
+	}
+
+	delimiterSum *= 2;
+
+	return (fa + fb + 4 * f_xi_half + delimiterSum ) * h/ 6;
+}
+
+double pontomedio (double (*f) (double), double a, double b, int n) 
+{
+	
+	double h = (b - a) / n;
+	double res = 0;
+	double step = h / 2;
+	double x = 0;
+
+	for(x = a; x <= b - h; x += h) 
+    {
+		res += f(x + step);
+	}
+
+	return res * h;
+}

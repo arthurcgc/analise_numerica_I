@@ -18,21 +18,15 @@ double pendulo (double t, double h, double* theta, double* w)
 
 
     k1 = h * v_ang(t, *theta);
-    /* printf("k1 = %.16g\n", k1); */
     k2 = h * v_ang(t + (h/2), *theta + (k1/2));
-    /* printf("k2 = %.16g\n", k2); */
     k3 = h * v_ang(t + (h/2), *theta + (k2/2));
-    /* printf("k3 = %.16g\n", k3); */
     k4 = h * v_ang(t + h, *theta + k3);
-    /* printf("k4 = %.16g\n", k4); */
 
 
     *theta= *theta + h * (*w);
     *w = *w + ((k1 + 2*k2 + 2*k3 + k4)/6);
     t = t + h;
-/* 
-    printf("w arthur = %.16g\n", *w);
-    printf("t arthur = %.16g\n", t); */
+
     return t;
 }
 

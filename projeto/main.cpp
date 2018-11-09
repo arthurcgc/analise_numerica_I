@@ -77,7 +77,7 @@ void create_h(vector<double> *h, int n_pair)
 
 int main()
 {
-    vector<pair<double, double> > spline1 = {make_pair(1,1), make_pair(2,2), make_pair(1,1)};
+    vector<pair<double, double> > spline1 = {make_pair(1,1), make_pair(2,2), make_pair(3,1)};
     
     int n = spline1.size();
 

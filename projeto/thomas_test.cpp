@@ -34,8 +34,34 @@ void test1()
 }
 
 
+void test2()
+{
+    int m, n;
+    double ** A;
+    m = n = 3;
+
+    A = matcria(m, n);
+    A[0][0] = 1; A[0][1] = 0;A[0][2] = 0;
+    A[1][0] = 0.25;A[1][1] = 0.5;A[1][2] = 0.25;
+    A[2][0] = 0; A[2][1] = 0; A[2][2] = 1;
+
+    cout << "Matriz A:\n";
+    printmat(m, n, A);
+
+    vector<double> points = {0,1,0};
+    vector<double> D = Thomas(A, points);
+
+
+    cout << "x points:\n";
+    for(int i = 0; i < D.size(); i++)
+    {
+        cout << D[i] << endl;
+    }
+}
+
 int main()
 {
-    test1();
+    //test1();
+    test2();
     return 0;
 }

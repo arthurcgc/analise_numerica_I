@@ -1,0 +1,3 @@
+-espaçamento entre os nós da spline(h):
+    No espaçamento uniforme o enunciado diz que podemos adotar h[i] = 1 tal que i = 1...n-2 mas e se os pontos especificados tiverem distancia menor do que 1
+    

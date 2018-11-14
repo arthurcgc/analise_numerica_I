@@ -1,119 +1,139 @@
 #include <iostream>
 #include <bits/stdc++.h>
-
+#include "matriz.h"
 
 using namespace std;
 
-double getDelta(int index, vector<double> h)
+vector<double> h_uniform(int npoints)
 {
-    double delta = h[index] / (h[index] + h[index+1]);
+    vector<double> h;
 
+    h.push_back(0);
+
+    for(int i = 1; i < npoints; i++)
+        h.push_back(1);
+
+    h.push_back(0);
+
+    return h;
+}
+
+vector<double> lambda_normal_open(vector<double> h)
+{
+    vector<double> lamb;
+    int n = h.size();
+
+    lamb.push_back(1);
+    for(int i=1;i < n-2;i++)
+        lamb.push_back( (h[i-1] + h[i]) / (h[i-1] + h[i] + h[i+1]) );
+    
+    lamb.push_back(1);
+
+    return lamb;
+}
+
+vector<double> mi_open(vector<double> h)
+{
+    int n = h.size();
+    vector<double> mi;
+    mi.push_back(0);
+    for(int i=1;i < n-2;i++)
+        mi.push_back( h[i] / (h[i] + h[i+1] + h[i+2]) );
+    
+    mi.push_back(0);
+
+    return mi;
+}
+
+vector<double> getDelta(vector<double> h)
+{
+    int n = h.size();
+    vector<double> delta;
+
+    for(int i = 0; i < n-1; i++)
+    {
+        delta.push_back( h[i]/(h[i]+h[i+1]) );
+    }
     return delta;
 }
 
-double getGamma(int index, vector<double> h)
+double **create_matrix(int n, vector<double> a, vector<double> b, vector<double> c)
 {
-    return 1;
-}
-
-double getGamma(int index, vector<double> h, vector<double> v)
-{
-    double N = 2 * (h[index] + h[index + 1]);
-    double D = ( v[index] * h[index] * h[index+1] ) + ( 2 * ( h[index] + h[index + 1] ) );
-
-    return N/D;
-}
-
-double getLamb(int index, vector<double> gamma, vector<double> h)
-{
-    double N = (gamma[index-1] * h[index-1]) + h[index];
-
-    double D = (gamma[index-1] * h[index-1]) + (h[index]) + (gamma[index-1] * h[index+1]);
-
-    return N/D;
-}
-
-double getMi(int index, vector<double> gamma, vector<double> h)
-{
-    double N = gamma[index-1] * h[index];
-
-    double D = ( gamma[index-1] * h[index] ) + ( h[index+1] ) + ( gamma[index-1+1] + h[index+2] );
-
-    return N/D;
-}
-
-double getA(int index, vector<double> delta, vector<double> lamb)
-{
-    return (1-delta[index-1]) * (1-lamb[index-1]);
-}
-
-double getB(int index, vector<double> delta, vector<double> lamb, vector<double> mi)
-{
-    return (1-delta[index-1]) * lamb[index-1] + delta[index-1]*(1-mi[index-1]);
-}
-
-double getC(int index, vector<double> delta, vector<double> mi)
-{
-    return delta[index-1] * mi[index-1];
-}
-
-void print_vec_pairs(vector<pair<double, double> > vec)
-{
-    for(size_t i = 0; i < vec.size(); i++)
+    double **A = matcria(n,n);
+    for(int i = 0;i < n;i++)
     {
-        cout <<"("<<vec[i].first << ", " << vec[i].second << ")" << endl;
+        if(i>0)
+            A[i][i-1] = a[i];
+        A[i][i] = b[i];
+        if(i+1<n)
+            A[i][i+1] = c[i];
     }
+
+    return A;
 }
 
-void create_h(vector<double> *h, int n_pair)
+void print_vec(vector<double> v)
 {
+    int n = v.size();
     
-    for(size_t i = 0; i < n_pair; i++)
+    for(size_t i = 0; i < n; i++)
     {
-        h->push_back(i);
+        cout << v[i] << endl;
     }
     
 }
+
+void normal_uniform_open_spline()
+{
+    vector<pair<double,double> > points;
+
+    points = {make_pair(0,0), make_pair(1,1), make_pair(2,0)};
+
+    int n = points.size();
+
+    vector<double> x,y;
+
+    for(size_t i = 0; i < n; i++)
+    {
+        x.push_back( points[i].first );
+        y.push_back( points[i].second );
+    }
+    
+    cout << "h:" <<endl;
+    vector<double> h = h_uniform(n);
+    print_vec(h);
+
+    cout << "lambda:" <<endl;
+    vector<double> lamb = lambda_normal_open(h);
+    print_vec(lamb);
+
+    cout << "mi:" <<endl;
+    vector<double> mi = mi_open(h);
+    print_vec(mi);
+
+    cout << "delta:" <<endl;
+    vector<double> delta = getDelta(h);
+    print_vec(delta);
+
+    cout << "\n\n";
+
+    vector<double> a,b,c;
+    for(int i = 0; i < n;i++)
+    {
+        a.push_back( (1-delta[i]) * (1-lamb[i]));
+        b.push_back( ((1-delta[i])*lamb[i]) + (delta[i]*(1-mi[i])) );
+        c.push_back( delta[i]*mi[i] );
+    }
+
+    double **A = create_matrix(n, a, b, c);
+    printmat(n, n, A);
+
+}
+
+
 
 int main()
 {
-    vector<pair<double, double> > spline1 = {make_pair(1,1), make_pair(2,2), make_pair(3,1)};
-    
-    int n = spline1.size();
-
-    vector<double> delta;
-    vector<double> gamma;
-    vector<double> lamb;
-    vector<double> mi;
-    vector<double> h;
-
-
-    vector<double> a;
-    vector<double> b;
-    vector<double> c;
-    create_h(&h, n);
-    
-    for(size_t i = 1; i < n-1; i++)
-    {
-        delta.push_back(getDelta(i, h));
-        gamma.push_back(getGamma(i, h));
-        lamb.push_back(getLamb(i, gamma, h));
-        mi.push_back(getMi(i, gamma, h));
-
-        a.push_back(getA(i, delta, lamb));
-        b.push_back(getB(i, delta, lamb, mi));
-        c.push_back(getC(i, delta, mi));
-    }
-    
-    cout << "Delta is: " << delta[0] << endl;
-    cout << "Gamma is: " << gamma[0] << endl;
-    cout << "Lambda is: " << lamb[0] << endl;
-    cout << "Mi is: " << mi[0] << endl;
-
-    cout << "a is: " << a[0] << endl;
-    cout << "b is: " << b[0] << endl;
-    cout << "c is: " << b[0] << endl;
-
-    
+    normal_uniform_open_spline();
     return 0;
 }

@@ -107,9 +107,10 @@ vector<double> Dy;
 vector<double> Rx,Lx,Ry,Ly;
 vector<double> Px, Py;
 
+
 void normal_uniform_open_spline()
 {
-    points = {make_pair(0.5,0.5), make_pair(2,1), make_pair(3,0)};
+    points = {make_pair(1.0,4.5), make_pair(2.7,6), make_pair(5.3,3), make_pair(9,9)};
     n = points.size();
     //definindo os pontos da spline
      for(size_t i = 0; i < n; i++)
@@ -172,6 +173,46 @@ void normal_uniform_open_spline()
     
 }
 
+static void LineInterpolation(double t,double p0x,double p0y,double p1x,double p1y,
+                                       double *pxt,double *pyt)
+{
+   *pxt=(1.0-t)*p0x+t*p1x;
+   *pyt=(1.0-t)*p0y+t*p1y;
+}
+
+static void DeCasteljau(double b0x,double b0y,	// De Casteljau Algorithm
+                       double b1x,double b1y,
+                       double b2x,double b2y,
+                       double b3x,double b3y)
+{
+    glBegin(GL_LINE_STRIP);
+    
+    for (double t=0; t<=1.0; t+=0.1)
+    {
+       double b01x,b01y;	// Primeiro nível de interpolaćões
+       LineInterpolation(t,b0x,b0y,b1x,b1y,&b01x,&b01y);
+       double b12x,b12y;
+       LineInterpolation(t,b1x,b1y,b2x,b2y,&b12x,&b12y);
+       double b23x,b23y;
+       LineInterpolation(t,b2x,b2y,b3x,b3y,&b23x,&b23y);
+
+       double b012x,b012y;	// Segundo nível de interpolaćões
+       LineInterpolation(t,b01x,b01y,b12x,b12y,&b012x,&b012y);
+       double b123x,b123y;
+       LineInterpolation(t,b12x,b12y,b23x,b23y,&b123x,&b123y);
+
+       double b0123x,b0123y;
+       LineInterpolation(t,b012x,b012y,b123x,b123y,&b0123x,&b0123y);
+
+       glVertex2d(b0123x,b0123y);
+
+
+        fprintf(stdout,"%.3f\t%.3f\n",b0123x,b0123y);
+    }
+
+    glEnd();
+}
+
 static void Redraw(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -204,6 +245,13 @@ static void Redraw(void)
     }
     glEnd();
 
+    //drawing bspline
+    cout << "\n\n";
+    for (int i = 0; i < x.size()-1; i++)
+    {
+     DeCasteljau(x[i],y[i],Rx[i],Ry[i],Lx[i],Ly[i],x[i+1],y[i+1]);
+    }
+    cout << "\n\n";
     glFlush();
 }
 
@@ -213,8 +261,8 @@ int main(int argc,char *argv[])
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(600,600);
     glutInitWindowPosition(200,200);
-    glutCreateWindow("SplineInterpolation");
-    gluOrtho2D(-1,5,-1,5);
+    glutCreateWindow("h_constante");
+    gluOrtho2D(-1,10,-1,10);
     glutDisplayFunc(Redraw);
     normal_uniform_open_spline();
     glutMainLoop();

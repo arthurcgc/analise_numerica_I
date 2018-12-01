@@ -5,8 +5,6 @@
 #include "spline.h"
 
 
-/* vector<pair<double,double> > points;
-points = {make_pair(1.0,4.5), make_pair(2.7,6), make_pair(5.3,3), make_pair(9,9)}; */
 BSpline B({make_pair(1.0,4.5), make_pair(2.7,6), make_pair(5.3,3), make_pair(9,9)}, 0.001);
 
 static void Redraw(void)

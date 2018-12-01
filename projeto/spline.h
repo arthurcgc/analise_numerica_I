@@ -38,6 +38,7 @@ class BSpline : public OpenSpline
     public:
         BSpline(vector<pair<double, double> > points, double t_size);
         BSpline(vector<pair<double,double> > points, double t_size, vector<double> v);
+    protected:
         void getH();
 };
 
@@ -46,5 +47,17 @@ class DynamicSpline : public OpenSpline
     public:
         DynamicSpline(vector<pair<double, double> > points, double t_size);
         DynamicSpline(vector<pair<double,double> > points, double t_size, vector<double> v);
+    protected:
         void getH();
+};
+
+class ClosedSpline : public OpenSpline
+{
+    public:
+        ClosedSpline(vector<pair<double, double> > points, double t_size);
+    protected:
+        void getMi();
+        void getLambda();
+        void getH();
+        void InitializeVectors(double t_size);
 };

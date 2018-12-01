@@ -5,8 +5,8 @@
 #include "spline.h"
 
 
-DynamicSpline B({make_pair(1.0,4.5), make_pair(2.7,6), make_pair(5.3,3)}, 0.01,
-                             {1000, 1000, 1000});
+DynamicSpline B({make_pair(1.0,4.5), make_pair(2.7,6), make_pair(5.3,3)}, 0.001,
+                             {100, 100, 100});
 
 static void Redraw(void)
 {
